@@ -1,39 +1,3 @@
-function fi_10Bit_Auswerten () {
-    iDez = 0
-    iExp = 1
-    iParity = 0
-    iFehler = 0
-    for (let Index = 0; Index <= 9; Index++) {
-        bBit = ab11Bit[Index]
-        if (Index == 0 && !(bBit)) {
-            iFehler = -1
-            break;
-        } else if (Index >= 1 && Index <= 7) {
-            if (bBit) {
-                iParity += 1
-            } else {
-                iDez += iExp
-            }
-            iExp = iExp * 2
-        } else if (Index == 8) {
-            if (bBit) {
-                iParity += 1
-            }
-            if (iParity % 2 != 0) {
-                iFehler = -8
-                break;
-            }
-        } else if (Index == 9 && bBit) {
-            iFehler = -9
-            break;
-        }
-    }
-    if (iFehler == 0) {
-        return iDez
-    } else {
-        return iFehler
-    }
-}
 function fab_Empfang () {
     ab_empfangene_Bits = []
     iPause_ms = input.runningTime() + iTakt_ms * 0.5
@@ -78,14 +42,9 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
 })
 let iAsc = 0
 let t = ""
+let ab11Bit: boolean[] = []
 let iPause_ms = 0
 let ab_empfangene_Bits: boolean[] = []
-let ab11Bit: boolean[] = []
-let bBit = false
-let iFehler = 0
-let iParity = 0
-let iExp = 0
-let iDez = 0
 let iTakt_ms = 0
 lcd16x2rgb.initLCD(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
 iTakt_ms = 500

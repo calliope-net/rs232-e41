@@ -13,8 +13,9 @@ namespace rs232
         let iExp = 1
         let iParity = 0
         let iFehler = 0
+        let bBit: boolean
         for (let i = 0; i <= 9; i++) {
-            bBit = ab11Bit[i]
+            bBit = pab_Bin[i]
             if (i == 0 && !(bBit)) {
                 iFehler = -1
                 break;
