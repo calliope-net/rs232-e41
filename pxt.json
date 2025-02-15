@@ -1,0 +1,24 @@
+{
+    "name": "rs232-e41",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "lcd-16x2": "github:calliope-net/lcd-16x2#v2.0.6"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "4.0.29",
+        "targetId": "calliopemini"
+    },
+    "supportedTargets": [
+        "calliopemini"
+    ],
+    "preferredEditor": "blocksprj"
+}
