@@ -61,7 +61,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     }
     basic.turnRgbLedOff()
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 15, lcd16x2rgb.lcd16x2_text(t))
-    iAsc = fi_10Bit_Auswerten()
+    iAsc = rs232.parse10Bit(ab11Bit)
     if (iAsc >= 0 && iAsc <= 127) {
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 0, 3, iAsc)
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 4, 5, String.fromCharCode(iAsc))
