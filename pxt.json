@@ -8,6 +8,7 @@
     "files": [
         "main.blocks",
         "main.ts",
+        "rs232.ts",
         "README.md"
     ],
     "testFiles": [
