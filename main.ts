@@ -5,11 +5,9 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     }
     basic.setLedColor(0xff0000)
     ab8Bit = []
-    iStart_ms = input.runningTime() + iTakt_ms
-    iPause_ms = iStart_ms + iTakt_ms * 0.5
+    iPause_ms = input.runningTime() + iTakt_ms * 0.5
     t = ""
-    iBitNummer = 0
-    for (let Index = 0; Index <= 9; Index++) {
+    for (let Index = 0; Index <= 10; Index++) {
         basic.pause(iPause_ms - input.runningTime())
         ab8Bit.push(fb_Licht_an())
         iPause_ms += iTakt_ms
@@ -30,10 +28,8 @@ function fb_Licht_an () {
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     basic.showNumber(pins.analogReadPin(AnalogPin.P2))
 })
-let iBitNummer = 0
 let t = ""
 let iPause_ms = 0
-let iStart_ms = 0
 let ab8Bit: boolean[] = []
 let iTakt_ms = 0
 lcd16x2rgb.initLCD(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
