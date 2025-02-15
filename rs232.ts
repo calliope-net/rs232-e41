@@ -1,5 +1,5 @@
 
-//% color=#001FCF icon="\uf26c" block="RS-232" weight=18
+//% color=#002050 icon="\uf093" block="RS-232" weight=15
 namespace rs232
 /* 
     
