@@ -1,10 +1,10 @@
-function fi_10Bit_Auswerten (pab_Bits: any[]) {
+function fi_10Bit_Auswerten () {
     iDez = 0
     iExp = 1
     iParity = 0
     iFehler = 0
     for (let Index = 0; Index <= 9; Index++) {
-        bBit = pab_Bits[Index]
+        bBit = ab11Bit[Index]
         if (Index == 0 && !(bBit)) {
             iFehler = -1
             break;
@@ -61,7 +61,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     }
     basic.turnRgbLedOff()
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 15, lcd16x2rgb.lcd16x2_text(t))
-    iAsc = fi_10Bit_Auswerten(ab11Bit)
+    iAsc = fi_10Bit_Auswerten()
     if (iAsc >= 0 && iAsc <= 127) {
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 0, 3, iAsc)
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 4, 5, String.fromCharCode(iAsc))
@@ -78,10 +78,10 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
 })
 let iAsc = 0
 let t = ""
-let ab11Bit: boolean[] = []
 let iPause_ms = 0
 let ab_empfangene_Bits: boolean[] = []
-let bBit: any = null
+let ab11Bit: boolean[] = []
+let bBit = false
 let iFehler = 0
 let iParity = 0
 let iExp = 0
