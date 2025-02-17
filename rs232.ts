@@ -14,11 +14,11 @@ namespace rs232
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
         let bBit: boolean
-        if (pab_Bin.length < 10) {
+        if (pab_Bin.length < 10) { // 10 Bit im Array boolean[]
             iFehler = -1
         }
         else {
-            for (let i = 0; i <= 9; i++) { // 10 Bit im Array boolean[]
+            for (let i = 0; i <= 9; i++) {
                 bBit = pab_Bin[i]          // aktuelles Bit lesen (negative Logik)
                 if (i == 0 && !bBit) {     // [0] Start Bit false - muss true sein (Licht an-true = logisch 0)
                     iFehler = -2
@@ -31,11 +31,11 @@ namespace rs232
                     }
                     iExp = iExp << 1 // um 1 Bit nach links schieben entspricht *2
                 }
-                else if (i == 8) {       // [8] Parity Bit
+                else if (i == 8) {         // [8] Parity Bit
                     if (!bBit) { // Parity zählt (Licht aus-false = logisch 1)
                         iParity++
                     }
-                    if (iParity % 2 != 0) { // ungerade Parität - Fehler -8
+                    if (iParity % 2 != 0) { // ungerade Parität - Parity Error
                         iFehler = -3
                         break // for
                     }

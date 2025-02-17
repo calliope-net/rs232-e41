@@ -13,7 +13,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     while (!(fb_Licht_an())) {
         basic.pause(10)
     }
-    basic.setLedColor(0xff0000)
+    basic.setLedColor(0x0000ff)
     ab11Bit = fab_Empfang()
     t = ""
     for (let Wert of ab11Bit) {
