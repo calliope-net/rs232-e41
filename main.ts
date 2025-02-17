@@ -1,4 +1,4 @@
-function empfang10Bit () {
+function empfange10Bit () {
     rs232.comment("vor Aufruf auf Startbit warten")
     empfangeneBits = []
     rs232.comment("Startbit nach einer halben Taktzeit einlesen")
@@ -6,18 +6,18 @@ function empfang10Bit () {
     for (let index = 0; index < 10; index++) {
         basic.pause(iPause_ms - input.runningTime())
         rs232.comment("Lichtschranke abfragen")
-        empfangeneBits.push(fb_Licht_an())
+        empfangeneBits.push(empfange1Bit())
         rs232.comment("einen Takt warten, trifft das nächste Bit in der Mitte")
         iPause_ms += iTakt_ms
     }
     return empfangeneBits
 }
 function sende10Bit () {
+    rs232.comment("Daten (in Variable sendBits) senden")
     iPause_ms = input.runningTime() + iTakt_ms
     rs232.comment("Startbit - Licht an")
     sende1Bit(true)
     for (let Index = 0; Index <= 7; Index++) {
-        let sendBits: number[] = []
         rs232.comment("7 Datenbits + 1 Paritätsbit")
         sende1Bit(!(sendBits[Index]))
     }
@@ -25,19 +25,20 @@ function sende10Bit () {
     sende1Bit(false)
 }
 input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
+    rs232.comment("1 Zeichen empfangen")
     lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
     basic.setLedColor(0x00ff00)
-    while (!(fb_Licht_an())) {
+    while (!(empfange1Bit())) {
         rs232.comment("auf Startbit warten (Licht an)")
         basic.pause(10)
     }
     basic.setLedColor(0x0000ff)
     rs232.comment("Daten empfangen")
-    array10Bit = empfang10Bit()
+    array10Bit = empfange10Bit()
     rs232.comment("10 Daten Bits anzeigen als 0110100101")
     lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.bin_toString(array10Bit, "0", "1"))
     rs232.comment("1 Startbit=0, 7 Datenbit, 1 Paritätsbit=gerade, 1 Stopbit=1 auswerten, ASCII Code (oder Fehler) zurück geben")
-    iAsc = rs232.bin_toAsc(array10Bit)
+    iAsc = rs232.binToAsc(array10Bit)
     if (rs232.between(iAsc, 32, 127)) {
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 11, 13, iAsc)
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 15, 15, String.fromCharCode(iAsc))
@@ -57,14 +58,25 @@ function sende1Bit (p_bit: boolean) {
     basic.pause(iPause_ms - input.runningTime())
     iPause_ms += iTakt_ms
 }
-function fb_Licht_an () {
-    return pins.analogReadPin(AnalogPin.P2) < 150
-}
-input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
+input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
     basic.showNumber(pins.analogReadPin(AnalogPin.P2))
 })
+input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
+    rs232.comment("1 Zeichen senden")
+    sendBits = rs232.chrToBin("K", 0)
+    lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
+    basic.setLedColor(0x0000ff)
+    rs232.comment("Daten (in Variable sendBits) senden")
+    sende10Bit()
+    rs232.comment("8 Daten Bits anzeigen als 11010010")
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.bin_toString(sendBits, "0", "1"))
+})
+function empfange1Bit () {
+    return pins.analogReadPin(AnalogPin.P2) < 150
+}
 let iAsc = 0
 let array10Bit: boolean[] = []
+let sendBits: boolean[] = []
 let iPause_ms = 0
 let empfangeneBits: boolean[] = []
 let iTakt_ms = 0

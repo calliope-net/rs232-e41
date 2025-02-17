@@ -8,11 +8,37 @@ namespace rs232
 */ {
 
 
+
+    // ========== group="Senden: 7 Datenbit, 1 Paritätsbit"
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="ASCII Zeichen → 8-Bitarray %text index %index" weight=5
+    export function chrToBin(text: string, index: number) {
+        return ascToBin(text.charCodeAt(index))
+    }
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="ASCII Code → 8-Bitarray %ascByte" weight=4
+    export function ascToBin(ascByte: number) {
+        let iParity = 0, bBit: boolean
+        let bitArray: boolean[]
+        for (let index = 0; index < 7; index++) {
+            bBit = ascByte % 2 != 0 // ungerade Zahl - Bit=true
+            bitArray.push(bBit) // [0]..[6] 7 Bit
+            if (bBit)
+                iParity++
+            ascByte >> 1 // um 1 Bit nach rechts schieben
+        }
+        bitArray.push(iParity % 2 != 0) // [7] das 8. Bit Parity
+        return bitArray
+    }
+
+
     // ========== group="Empfang"
 
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
     //% block="Bitarray → ASCII Code %bitArray (10 Bit)" weight=2
-    export function bin_toAsc(bitArray: boolean[]) {
+    export function binToAsc(bitArray: boolean[]) {
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
         let bBit: boolean
