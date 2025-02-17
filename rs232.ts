@@ -8,25 +8,10 @@ namespace rs232
 */ {
 
 
-    //% group="Anzeige"
-    //% block="Bitarray → Text %bitArray true %s1 false %s0" weight=2
-    export function bin_toString(bitArray: boolean[], s1?: string, s0?: string): String {
-        let s = ""
-        for (let bit of bitArray) {
-            s = s + (bit ? s1 : s0)
-           /*  if (bit)
-                s = s + "0"
-            else
-                s = s + "1" */
-        }
-        return s
-    }
-
-
     // ========== group="Empfang"
 
     //% group="Empfang"
-    //% block="Bitarray (10 Bit) → ASCII Code %bitArray" weight=2
+    //% block="Bitarray → ASCII Code %bitArray (10 Bit)" weight=2
     export function bin_toAsc(bitArray: boolean[]) {
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
@@ -71,10 +56,44 @@ namespace rs232
     }
 
 
-    // ========== group="Kommentar" advanced=true
 
-    //% group="Kommentar" advanced=true
-    //% block="// %text"
+    // ========== group="Anzeige"
+
+    //% group="Anzeige"
+    //% block="Bitarray → Text %bitArray wahr %s1 falsch %s0" weight=3
+    // s1.defl="1" s0.defl="0"
+    //% expandableArgumentMode="toggle"
+    export function bin_toString(bitArray: boolean[], s1: string, s0: string): String {
+        let s = ""
+        for (let bit of bitArray)
+            s = s + (bit ? s1 : s0)
+        return s
+    }
+
+    //% group="Anzeige"
+    //% block="Fehler Text %fehlerCode" weight=2
+    export function fehlerText(fehlerCode: number): string {
+        switch (fehlerCode) {
+            case -1: return "<10 Bit"
+            case -2: return "Start"
+            case -3: return "Parity"
+            case -4: return "Stop"
+            default: return fehlerCode.toString()
+        }
+    }
+
+
+
+    // ========== group="Funktionen"
+
+    //% group="Funktionen" 
+    //% block="// %text" weight=6
     export function comment(text: string): void { }
+
+    //% group="Funktionen"
+    //% block="%i0 zwischen %i1 und %i2" weight=4
+    export function between(i0: number, i1: number, i2: number): boolean {
+        return (i0 >= i1 && i0 <= i2)
+    }
 
 } // rs232.ts
