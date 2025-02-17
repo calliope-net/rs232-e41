@@ -8,8 +8,10 @@ namespace rs232
 */ {
 
 
+    // ========== group="Empfang"
+
     //% group="Empfang"
-    //% block="Bitarray auswerten (10 Bit) %pab_Bin" weight=2
+    //% block="Bitarray (10 Bit) → ASCII Code %pab_Bin" weight=2
     export function parse10Bit(pab_Bin: boolean[]) {
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
@@ -53,5 +55,11 @@ namespace rs232
             return iFehler // -1 Array<10 | -2 Start | -3 Parity | -4 Stop
     }
 
+
+    // ========== group="Kommentar" advanced=true
+
+    //% group="Kommentar" advanced=true
+    //% block="// %text"
+    export function comment(text: string): void { }
 
 } // rs232.ts
