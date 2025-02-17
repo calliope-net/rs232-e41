@@ -1,6 +1,8 @@
 
 > Diese Seite bei [https://calliope-net.github.io/rs232-e41/](https://calliope-net.github.io/rs232-e41/) öffnen
 
+![](rs232.png)
+
 ## Als Erweiterung verwenden
 
 Dieses Repository kann als **Erweiterung** in MakeCode hinzugefügt werden.
