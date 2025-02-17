@@ -71,7 +71,7 @@ namespace rs232
     }
 
     //% group="Anzeige"
-    //% block="Fehler Text %fehlerCode" weight=2
+    //% block="Fehler Code → Text %fehlerCode" weight=2
     export function fehlerText(fehlerCode: number): string {
         switch (fehlerCode) {
             case -1: return "<10 Bit"

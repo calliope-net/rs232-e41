@@ -17,17 +17,20 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
         rs232.comment("warten bis Licht an (Startbit)")
         basic.pause(10)
     }
+    lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
     basic.setLedColor(0x0000ff)
     rs232.comment("Daten empfangen")
-    ab10Bit = fab_Empfang()
-    basic.turnRgbLedOff()
-    lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.bin_toString(ab10Bit, "1", "0"))
-    iAsc = rs232.bin_toAsc(ab10Bit)
+    array10Bit = fab_Empfang()
+    rs232.comment("10 Daten Bits anzeigen als 0110100101")
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.bin_toString(array10Bit, "0", "1"))
+    rs232.comment("1 Startbit=0, 7 Datenbit, 1 Paritätsbit=gerade, 1 Stopbit=1 auswerten, ASCII Code (oder Fehler) zurück geben")
+    iAsc = rs232.bin_toAsc(array10Bit)
     if (rs232.between(iAsc, 32, 127)) {
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 11, 13, iAsc)
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 15, 15, String.fromCharCode(iAsc))
+        basic.turnRgbLedOff()
     } else {
+        rs232.comment("kein gültiges ASCII Zeichen 32..127 - Fehler anzeigen")
         lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 0, 7, rs232.fehlerText(iAsc))
         basic.setLedColor(0xff0000)
     }
@@ -39,7 +42,7 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     basic.showNumber(pins.analogReadPin(AnalogPin.P2))
 })
 let iAsc = 0
-let ab10Bit: boolean[] = []
+let array10Bit: boolean[] = []
 let iPause_ms = 0
 let ab_empfangene_Bits: boolean[] = []
 let iTakt_ms = 0
