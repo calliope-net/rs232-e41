@@ -10,7 +10,7 @@ namespace rs232
 
     // ========== group="Empfang"
 
-    //% group="Empfang"
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
     //% block="Bitarray → ASCII Code %bitArray (10 Bit)" weight=2
     export function bin_toAsc(bitArray: boolean[]) {
         let iDez = 0, iParity = 0, iFehler = 0
