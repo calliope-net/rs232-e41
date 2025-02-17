@@ -19,7 +19,7 @@ function sende10Bit () {
     sende1Bit(true)
     for (let Index = 0; Index <= 7; Index++) {
         rs232.comment("7 Datenbits + 1 Paritätsbit")
-        sende1Bit(!(sendBits[Index]))
+        sende1Bit(sendBits[Index])
     }
     rs232.comment("Stopbit - Licht aus")
     sende1Bit(false)
@@ -63,13 +63,15 @@ input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
 })
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     rs232.comment("1 Zeichen senden")
-    sendBits = rs232.chrToBin("K", 0)
     lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
+    basic.setLedColor(0x00ff00)
+    sendBits = rs232.chrToBin("K", 0)
+    rs232.comment("8 Daten Bits anzeigen als 11010010")
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 1, 10, rs232.bin_toString(sendBits, "0", "1"))
     basic.setLedColor(0x0000ff)
     rs232.comment("Daten (in Variable sendBits) senden")
     sende10Bit()
-    rs232.comment("8 Daten Bits anzeigen als 11010010")
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.bin_toString(sendBits, "0", "1"))
+    basic.turnRgbLedOff()
 })
 function empfange1Bit () {
     return pins.analogReadPin(AnalogPin.P2) < 150

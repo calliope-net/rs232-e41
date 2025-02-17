@@ -21,13 +21,13 @@ namespace rs232
     //% block="ASCII Code → 8-Bitarray %ascByte" weight=4
     export function ascToBin(ascByte: number) {
         let iParity = 0, bBit: boolean
-        let bitArray: boolean[]
+        let bitArray: boolean[] = []
         for (let index = 0; index < 7; index++) {
-            bBit = ascByte % 2 != 0 // ungerade Zahl - Bit=true
+            bBit = ascByte % 2 == 0 // gerade Zahl==0 - Bit=true (negative Logik)
             bitArray.push(bBit) // [0]..[6] 7 Bit
             if (bBit)
                 iParity++
-            ascByte >> 1 // um 1 Bit nach rechts schieben
+            ascByte = ascByte >> 1 // um 1 Bit nach rechts schieben
         }
         bitArray.push(iParity % 2 != 0) // [7] das 8. Bit Parity
         return bitArray
