@@ -8,20 +8,35 @@ namespace rs232
 */ {
 
 
+    //% group="Anzeige"
+    //% block="Bitarray → Text %bitArray true %s1 false %s0" weight=2
+    export function bin_toString(bitArray: boolean[], s1?: string, s0?: string): String {
+        let s = ""
+        for (let bit of bitArray) {
+            s = s + (bit ? s1 : s0)
+           /*  if (bit)
+                s = s + "0"
+            else
+                s = s + "1" */
+        }
+        return s
+    }
+
+
     // ========== group="Empfang"
 
     //% group="Empfang"
-    //% block="Bitarray (10 Bit) → ASCII Code %pab_Bin" weight=2
-    export function parse10Bit(pab_Bin: boolean[]) {
+    //% block="Bitarray (10 Bit) → ASCII Code %bitArray" weight=2
+    export function bin_toAsc(bitArray: boolean[]) {
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
         let bBit: boolean
-        if (pab_Bin.length < 10) { // 10 Bit im Array boolean[]
+        if (bitArray.length < 10) { // 10 Bit im Array boolean[]
             iFehler = -1
         }
         else {
             for (let i = 0; i <= 9; i++) {
-                bBit = pab_Bin[i]          // aktuelles Bit lesen (negative Logik)
+                bBit = bitArray[i]          // aktuelles Bit lesen (negative Logik)
                 if (i == 0 && !bBit) {     // [0] Start Bit false - muss true sein (Licht an-true = logisch 0)
                     iFehler = -2
                     break // for
