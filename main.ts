@@ -28,7 +28,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     rs232.comment("1 Zeichen empfangen")
     lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
     basic.setLedColor(0x00ff00)
-    while (!(empfange1Bit())) {
+    while (!(empfange1Bit()) && !(input.buttonIsPressed(Button.AB))) {
         rs232.comment("auf Startbit warten (Licht an)")
         basic.pause(10)
     }
@@ -59,7 +59,7 @@ function sende1Bit (p_bit: boolean) {
     iPause_ms += iTakt_ms
 }
 input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
-    basic.showNumber(pins.analogReadPin(AnalogPin.P2))
+    basic.showNumber(pins.analogReadPin(AnalogPin.C16))
 })
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     rs232.comment("1 Zeichen senden")
@@ -74,7 +74,7 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     basic.turnRgbLedOff()
 })
 function empfange1Bit () {
-    return pins.analogReadPin(AnalogPin.P2) < 150
+    return pins.analogReadPin(AnalogPin.C16) < 150
 }
 let iAsc = 0
 let array10Bit: boolean[] = []
