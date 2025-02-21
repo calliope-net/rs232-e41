@@ -74,6 +74,7 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     basic.turnRgbLedOff()
 })
 function empfange1Bit () {
+    rs232.comment("hell ist true")
     return pins.analogReadPin(AnalogPin.C16) < 150
 }
 let iAsc = 0
