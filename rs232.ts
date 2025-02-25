@@ -13,13 +13,13 @@ namespace rs232
 
     //% group="Senden: 7 Datenbit, 1 Paritätsbit"
     //% block="ASCII Zeichen → 8-Bitarray %text index %index" weight=5
-    export function chrToBin(text: string, index: number) {
+    export function chrToBin(text: string, index: number): boolean[] {
         return ascToBin(text.charCodeAt(index))
     }
 
     //% group="Senden: 7 Datenbit, 1 Paritätsbit"
     //% block="ASCII Code → 8-Bitarray %ascByte" weight=4
-    export function ascToBin(ascByte: number) {
+    export function ascToBin(ascByte: number): boolean[] {
         let iParity = 0, bBit: boolean
         let bitArray: boolean[] = []
         for (let index = 0; index < 7; index++) {
@@ -38,7 +38,7 @@ namespace rs232
 
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
     //% block="Bitarray → ASCII Code %bitArray (10 Bit)" weight=2
-    export function binToAsc(bitArray: boolean[]) {
+    export function binToAsc(bitArray: boolean[]): number {
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
         let bBit: boolean
@@ -89,7 +89,7 @@ namespace rs232
     //% block="Bitarray → Text %bitArray wahr %s1 falsch %s0" weight=3
     // s1.defl="1" s0.defl="0"
     //% expandableArgumentMode="toggle"
-    export function binToString(bitArray: boolean[], s1: string, s0: string): String {
+    export function binToString(bitArray: boolean[], s1: string, s0: string): string {
         let s = ""
         for (let bit of bitArray)
             s = s + (bit ? s1 : s0)
