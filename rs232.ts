@@ -32,6 +32,63 @@ namespace rs232
 
     // ========== group="Senden: 7 Datenbit, 1 Paritätsbit"
 
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="sende 1 Bit %bit" weight=9
+    export function sende1Bit(bit: boolean) {
+        if (bit) {
+            pins.digitalWritePin(n_pinLED, 1)
+        } else {
+            pins.digitalWritePin(n_pinLED, 0)
+        }
+        // basic.pause(iPause_ms - input.runningTime())
+        // iPause_ms += iTakt_ms
+    }
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="sende 11 Bit %send8Bits" weight=8
+    export function sende11Bit(send8Bit: boolean[]) {
+        // Daten (in Variable sendBits) senden
+        let iPause_ms = input.runningTime() + n_takt_ms
+
+        sende1Bit(true) // Startbit - Licht an
+        basic.pause(iPause_ms - input.runningTime())
+        iPause_ms += n_takt_ms
+
+        for (let i = 0; i <= 7; i++) {
+            sende1Bit(send8Bit[i]) // 7 Datenbits + 1 Paritätsbit
+            basic.pause(iPause_ms - input.runningTime())
+            iPause_ms += n_takt_ms
+        }
+        sende1Bit(false) // 2 Stopbit - Licht aus
+        basic.pause(iPause_ms - input.runningTime())
+        iPause_ms += n_takt_ms
+
+        sende1Bit(false)
+        basic.pause(iPause_ms - input.runningTime())
+        iPause_ms += n_takt_ms
+
+    }
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="sende Text %text mit ENTER %mitCR" weight=7
+    export function sendeText(text: string, mitCR: boolean) {
+        for (let i = 0; i < text.length; i++) {
+            sende11Bit(ascToBin(text.charCodeAt(i)))
+        }
+        if (mitCR)
+            sende11Bit(ascToBin(13))
+    }
+
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="sende 1 Zeichen ASCII Code %asc" weight=6
+    //% asc.min=32 asc.max=127 asc.defl=13
+    export function sendeAsc(asc: number) {
+        sende11Bit(ascToBin(asc))
+    }
+
+
+
     //% group="Senden: 7 Datenbit, 1 Paritätsbit"
     //% block="ASCII Zeichen → 8-Bitarray text %text index %index" weight=5
     export function chrToBin(text: string, index: number): boolean[] {
@@ -43,7 +100,7 @@ namespace rs232
     export function ascToBin(ascByte: number): boolean[] {
         let iParity = 0, bBit: boolean
         let bitArray: boolean[] = []
-        for (let index = 0; index < 7; index++) {
+        for (let i = 0; i < 7; i++) {
             bBit = ascByte % 2 == 0 // gerade Zahl==0 - Bit=true (negative Logik)
             bitArray.push(bBit) // [0]..[6] 7 Bit
             if (bBit)
@@ -62,6 +119,14 @@ namespace rs232
     }
 
     // ========== group="Empfang"
+
+
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+    //% block="empfange 1 Bit (hell ist true)" weight=5
+    export function empfange1Bit() {
+        // hell ist true
+        return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
+    }
 
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
     //% block="10-Bitarray → ASCII Code %bitArray" weight=4

@@ -18,6 +18,7 @@ function sende10Bit () {
     rs232.comment("Startbit - Licht an")
     sende1Bit(true)
     for (let Index = 0; Index <= 7; Index++) {
+        let sendBits: boolean[] = []
         rs232.comment("7 Datenbits + 1 Paritätsbit")
         sende1Bit(sendBits[Index])
     }
@@ -62,15 +63,8 @@ input.onButtonEvent(Button.AB, input.buttonEventClick(), function () {
     basic.showNumber(pins.analogReadPin(AnalogPin.C16))
 })
 input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
-    rs232.comment("1 Zeichen senden")
-    lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
-    basic.setLedColor(0x00ff00)
-    sendBits = rs232.chrToBin("K", 0)
-    rs232.comment("8 Daten Bits anzeigen als 11010010")
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 1, 10, rs232.binToString(sendBits, "0", "1"))
     basic.setLedColor(0x0000ff)
-    rs232.comment("Daten (in Variable sendBits) senden")
-    sende10Bit()
+    rs232.sendeText("8 Bit", true)
     basic.turnRgbLedOff()
 })
 function empfange1Bit () {
@@ -79,7 +73,6 @@ function empfange1Bit () {
 }
 let iAsc = 0
 let array10Bit: boolean[] = []
-let sendBits: boolean[] = []
 let iPause_ms = 0
 let empfangeneBits: boolean[] = []
 let iTakt_ms = 0
