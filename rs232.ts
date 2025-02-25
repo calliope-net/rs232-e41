@@ -7,6 +7,27 @@ namespace rs232
     https://calliope-net.github.io/rs232-e41/rs232.png
 */ {
 
+    let n_pinLED: DigitalPin = DigitalPin.C17
+    let n_pinFototransistor: AnalogPin = AnalogPin.C16
+    let n_valueFototransistor: number = 150
+    let n_takt_ms: number = 400
+
+    //% group="Pins und Takt (Millisekunden)"
+    //% block="Pins: LED %pinLED Fototransistor %pinFototransistor Helligkeit < %valueFototransistor" weight=5
+    //% pinLED.defl=DigitalPin.C17 pinFototransistor.defl=AnalogPin.C16 valueFototransistor.defl=150
+    export function setPins(pinLED: DigitalPin, pinFototransistor: AnalogPin, valueFototransistor: number) {
+        n_pinLED = pinLED
+        n_pinFototransistor = pinFototransistor
+        n_valueFototransistor = valueFototransistor
+    }
+
+    //% group="Pins und Takt (Millisekunden)"
+    //% block="Takt: %pTakt_ms ms" weight=4
+    //% pTakt_ms.defl=400
+    export function setTakt(pTakt_ms: number) {
+        n_takt_ms = pTakt_ms
+    }
+
 
 
     // ========== group="Senden: 7 Datenbit, 1 Paritätsbit"

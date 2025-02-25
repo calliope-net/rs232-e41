@@ -84,4 +84,6 @@ let iPause_ms = 0
 let empfangeneBits: boolean[] = []
 let iTakt_ms = 0
 lcd16x2rgb.initLCD(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
-iTakt_ms = 500
+rs232.setPins(DigitalPin.C17, AnalogPin.C16, 150)
+rs232.setTakt(400)
+iTakt_ms = 400
