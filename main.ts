@@ -36,7 +36,7 @@ input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     rs232.comment("Daten empfangen")
     array10Bit = empfange10Bit()
     rs232.comment("10 Daten Bits anzeigen als 0110100101")
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.bin_toString(array10Bit, "0", "1"))
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.binToString(array10Bit, "0", "1"))
     rs232.comment("1 Startbit=0, 7 Datenbit, 1 Paritätsbit=gerade, 1 Stopbit=1 auswerten, ASCII Code (oder Fehler) zurück geben")
     iAsc = rs232.binToAsc(array10Bit)
     if (rs232.between(iAsc, 32, 127)) {
@@ -67,7 +67,7 @@ input.onButtonEvent(Button.B, input.buttonEventClick(), function () {
     basic.setLedColor(0x00ff00)
     sendBits = rs232.chrToBin("K", 0)
     rs232.comment("8 Daten Bits anzeigen als 11010010")
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 1, 10, rs232.bin_toString(sendBits, "0", "1"))
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 1, 10, rs232.binToString(sendBits, "0", "1"))
     basic.setLedColor(0x0000ff)
     rs232.comment("Daten (in Variable sendBits) senden")
     sende10Bit()

@@ -89,7 +89,7 @@ namespace rs232
     //% block="Bitarray → Text %bitArray wahr %s1 falsch %s0" weight=3
     // s1.defl="1" s0.defl="0"
     //% expandableArgumentMode="toggle"
-    export function bin_toString(bitArray: boolean[], s1: string, s0: string): String {
+    export function binToString(bitArray: boolean[], s1: string, s0: string): String {
         let s = ""
         for (let bit of bitArray)
             s = s + (bit ? s1 : s0)
