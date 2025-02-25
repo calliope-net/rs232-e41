@@ -12,7 +12,7 @@ namespace rs232
     // ========== group="Senden: 7 Datenbit, 1 Paritätsbit"
 
     //% group="Senden: 7 Datenbit, 1 Paritätsbit"
-    //% block="ASCII Zeichen → 8-Bitarray %text index %index" weight=5
+    //% block="ASCII Zeichen → 8-Bitarray text %text index %index" weight=5
     export function chrToBin(text: string, index: number): boolean[] {
         return ascToBin(text.charCodeAt(index))
     }
@@ -34,10 +34,16 @@ namespace rs232
     }
 
 
+    //% group="Senden: 7 Datenbit, 1 Paritätsbit"
+    //% block="ASCII Zeichen → ASCII Code text %text index %index" weight=3
+    export function chrToAsc(text: string, index: number): number {
+        return text.charCodeAt(index)
+    }
+
     // ========== group="Empfang"
 
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
-    //% block="Bitarray → ASCII Code %bitArray (10 Bit)" weight=2
+    //% block="10-Bitarray → ASCII Code %bitArray" weight=4
     export function binToAsc(bitArray: boolean[]): number {
         let iDez = 0, iParity = 0, iFehler = 0
         let iExp = 1
@@ -81,7 +87,14 @@ namespace rs232
             return iFehler // -1 Array<10 | -2 Start | -3 Parity | -4 Stop
     }
 
-
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+    //% block="ASCII Code → ASCII Zeichen %ascByte 32..127 \\|fehler\\|" weight=2
+    export function ascToChr(ascByte: number) {
+        if (between(ascByte, 32, 127))
+            return String.fromCharCode(ascByte)
+        else
+            return "|" + ascByte + "|"
+    }
 
     // ========== group="Anzeige"
 
