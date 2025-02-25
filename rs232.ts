@@ -11,6 +11,8 @@ namespace rs232
     let n_pinFototransistor: AnalogPin = AnalogPin.C16
     let n_valueFototransistor: number = 150
     let n_takt_ms: number = 400
+    let n_startBitTime: number = 0.5
+    let n_escape: boolean = false // warten auf Startbit beim Empfang abbrechen
 
     //% group="Pins und Takt (Millisekunden)"
     //% block="Pins: LED %pinLED Fototransistor %pinFototransistor Helligkeit < %valueFototransistor" weight=5
@@ -22,10 +24,12 @@ namespace rs232
     }
 
     //% group="Pins und Takt (Millisekunden)"
-    //% block="Takt: %pTakt_ms ms" weight=4
+    //% block="Takt: %pTakt_ms ms || startBitTime %startBitTime" weight=4
     //% pTakt_ms.defl=400
-    export function setTakt(pTakt_ms: number) {
+    //% startBitTime.defl=0.5
+    export function setTakt(pTakt_ms: number, startBitTime = 0.5) {
         n_takt_ms = pTakt_ms
+        n_startBitTime = startBitTime
     }
 
 
@@ -118,15 +122,67 @@ namespace rs232
         return text.charCodeAt(index)
     }
 
+
+
+
     // ========== group="Empfang"
 
-
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
-    //% block="empfange 1 Bit (hell ist true)" weight=5
+    //% block="empfange 1 Bit (hell ist true)" weight=9
     export function empfange1Bit() {
         // hell ist true
         return pins.analogReadPin(n_pinFototransistor) < n_valueFototransistor
     }
+
+
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+    //% block="empfange 10 Bit" weight=8
+    export function empfange10Bit(): boolean[] {
+        let iPause_ms: number
+        let empfangeneBits: boolean[] = []
+
+        while (!empfange1Bit()) { // auf Startbit warten (Licht an)
+            iPause_ms = input.runningTime() + n_takt_ms * n_startBitTime // 0.5 oder 0.45
+            if (n_escape)
+                break
+        }
+        if (!n_escape) {
+
+            // Startbit nach einer halben Taktzeit einlesen
+            //  iPause_ms = input.runningTime() + iTakt_ms * 0.5
+            for (let i = 0; i < 10; i++) {
+                basic.pause(iPause_ms - input.runningTime())
+                empfangeneBits.push(empfange1Bit()) // Lichtschranke abfragen
+                iPause_ms += n_takt_ms // einen Takt warten, trifft das nächste Bit in der Mitte
+            }
+            return empfangeneBits
+        }
+        else {
+            return []
+        }
+    }
+
+    //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
+    //% block="empfange Text bis ENTER" weight=7
+    export function empfangeText(): string {
+        n_escape = false
+        let text = ""
+        let iAsc: number
+        while (true) {
+            iAsc = binToAsc(empfange10Bit())
+            if (iAsc == 13) {
+                text += String.fromCharCode(iAsc)
+                break
+            } else if (iAsc == -1) {
+                text += "|" + iAsc + "|"
+                break
+            } else {
+                text += ascToChr(iAsc)
+            }
+        }
+        return text
+    }
+
 
     //% group="Empfang: 1 Startbit, 7 Datenbit, 1 Paritätsbit, 1 Stopbit"
     //% block="10-Bitarray → ASCII Code %bitArray" weight=4

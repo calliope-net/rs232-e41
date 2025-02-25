@@ -28,27 +28,9 @@ function sende10Bit () {
 input.onButtonEvent(Button.A, input.buttonEventClick(), function () {
     rs232.comment("1 Zeichen empfangen")
     lcd16x2rgb.clearScreen(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
-    basic.setLedColor(0x00ff00)
-    while (!(empfange1Bit()) && !(input.buttonIsPressed(Button.AB))) {
-        rs232.comment("auf Startbit warten (Licht an)")
-        basic.pause(10)
-    }
-    basic.setLedColor(0x0000ff)
-    rs232.comment("Daten empfangen")
-    array10Bit = empfange10Bit()
-    rs232.comment("10 Daten Bits anzeigen als 0110100101")
-    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 0, 10, rs232.binToString(array10Bit, "0", "1"))
-    rs232.comment("1 Startbit=0, 7 Datenbit, 1 Paritätsbit=gerade, 1 Stopbit=1 auswerten, ASCII Code (oder Fehler) zurück geben")
-    iAsc = rs232.binToAsc(array10Bit)
-    if (rs232.between(iAsc, 32, 127)) {
-        lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 11, 13, iAsc)
-        lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 0, 15, 15, String.fromCharCode(iAsc))
-        basic.turnRgbLedOff()
-    } else {
-        rs232.comment("kein gültiges ASCII Zeichen 32..127 - Fehler anzeigen")
-        lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 0, 7, rs232.fehlerText(iAsc))
-        basic.setLedColor(0xff0000)
-    }
+    basic.setLedColor(0xff0000)
+    lcd16x2rgb.writeText(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E), 1, 0, 15, rs232.empfangeText())
+    basic.turnRgbLedOff()
 })
 function sende1Bit (p_bit: boolean) {
     if (p_bit) {
@@ -71,12 +53,10 @@ function empfange1Bit () {
     rs232.comment("hell ist true")
     return pins.analogReadPin(AnalogPin.C16) < 150
 }
-let iAsc = 0
-let array10Bit: boolean[] = []
 let iPause_ms = 0
 let empfangeneBits: boolean[] = []
 let iTakt_ms = 0
 lcd16x2rgb.initLCD(lcd16x2rgb.lcd16x2_eADDR(lcd16x2rgb.eADDR_LCD.LCD_16x2_x3E))
 rs232.setPins(DigitalPin.C17, AnalogPin.C16, 150)
-rs232.setTakt(400)
+rs232.setTakt(400, 0.5)
 iTakt_ms = 400
